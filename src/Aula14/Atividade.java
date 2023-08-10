@@ -1,7 +1,19 @@
 package Aula14;
 
+import Aula14.Entities.Client;
+import Aula14.Entities.Order;
+import Aula14.Entities.OrderItem;
+import Aula14.Entities.Product;
+import Aula14.enums.OrderStatus;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
+
 public class Atividade {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         /*
             ATIVIDADE
 
@@ -71,6 +83,59 @@ public class Atividade {
                 Valor total: $900.00
         */
 
+        Locale.setDefault(Locale.US);
+        Scanner r = new Scanner(System.in);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+//        Product p = new Product("TV", 1000.00, 1);
+//
+//        OrderItem oi1 = new OrderItem(1, 1000.00, p);
+//        System.out.printf((oi1.toString()) + "%n");
+
+
+//
+
+        System.out.println("Digite os dados do cliente: ");
+        System.out.println("Nome: ");
+        String name = r.next();
+        System.out.println("Email: ");
+        String email = r.next();
+        System.out.println("Data de nascimento: ");
+        Date birthDate = sdf.parse(r.next());
+
+        Client client = new Client(name, email, birthDate);
+
+        System.out.println("Insira os dados dos itens do pedido: ");
+        System.out.println("Status: ");
+        OrderStatus status = OrderStatus.valueOf(r.next());
+
+        Order order = new Order(new Date(), status, client);
+
+        System.out.println("Quantos itens para este pedido? ");
+        int num = r.nextInt();
+        for (int i = 0; i < num; i++) {
+            System.out.println("Insira os dados do item #" + (i + 1) + ": ");
+            System.out.println("Nome do produto: ");
+            r.nextLine();
+            String productName = r.nextLine();
+            System.out.println("Preço: ");
+            double productPrice = r.nextDouble();
+            System.out.println("Quantidade: ");
+            int quantity = r.nextInt();
+
+            Product product = new Product(productName, productPrice);
+
+            OrderItem item = new OrderItem(quantity, productPrice, product);
+            order.addItem(item);
+        }
+
+        System.out.println("Detalhes do pedido: ");
+        System.out.println("Momento do pedido: " + order.getMoment());
+        System.out.println("Status do pedido: " + order.getStatus());
+        System.out.println("Cliente: " + client.getName() + " - " + client.getEmail());
+        System.out.println("Lista de itens do pedido: ");
+        System.out.println(order);
+
+        r.close();
     }
 }
